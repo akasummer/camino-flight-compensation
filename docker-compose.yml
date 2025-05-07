@@ -1,9 +1,9 @@
 services:
   distributor-bot:
-    image: camino-messenger-bot
+    image: c4tplatform/camino-messenger-bot
 
     volumes:
-      - ./distributor/cmb-config/messenger-config.yaml:/cmb-config/messenger-config.yaml
+      - ./distributor/cmb-config/:/cmb-config/
 
     command: |
       --config /cmb-config/messenger-config.yaml
@@ -12,10 +12,10 @@ services:
       - "9090:9090"
 
   supplier-bot:
-    image: camino-messenger-bot
+    image: c4tplatform/camino-messenger-bot
 
     volumes:
-      - ./supplier/cmb-config/messenger-config.yaml:/cmb-config/messenger-config.yaml
+      - ./supplier/cmb-config/:/cmb-config/
 
     command: >
       --config /cmb-config/messenger-config.yaml
@@ -24,4 +24,5 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.partner-plugin
+      
     image: camino-refundio-partner-plugin
