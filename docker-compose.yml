@@ -1,0 +1,21 @@
+services:
+  distributor-bot:
+    image: camino-messenger-bot
+
+    volumes:
+      - ./distributor/cmb-config/messenger-config.yaml:/cmb-config/messenger-config.yaml
+
+    command: |
+      --config /cmb-config/messenger-config.yaml
+
+    ports:
+      - "9090:9090"
+
+  supplier-bot:
+    image: camino-messenger-bot
+
+    volumes:
+      - ./supplier/cmb-config/messenger-config.yaml:/cmb-config/messenger-config.yaml
+
+    command: >
+      --config /cmb-config/messenger-config.yaml
