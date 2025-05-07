@@ -1,13 +1,15 @@
 @startuml
 
-actor "End-Consumer" as endUser
+!theme carbon-gray
+
+participant "End-User" as endUser
 participant "Distributor-System" as distributorSystem
 ' participant "Distributor Partner-Plugin" as distributorPlugin
 ' participant "Distributor-Bot" as distributorBot
 ' participant "Supplier-Bot" as supplierBot
 ' participant "Supplier Partner-Plugin" as supplierPlugin
 participant "Supplier-System" as supplierSystem
-actor "Refundio" as refundio
+participant "Refundio" as refundio
 
 endUser -> distributorSystem : Supplies form data
 distributorSystem -> supplierSystem : ClaimFlightDisruptionRequest
