@@ -25,7 +25,7 @@ export const uploadFile = async (file: File): Promise<UploadedFile> => {
 export const submitClaim = async (formData: FormData): Promise<Claim> => {
   const apiBasePath = import.meta.env.VITE_BACKEND_BASE_PATH;
 
-  const response = await fetch(apiBasePath, {
+  const response = await fetch(`${apiBasePath}/submit`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
