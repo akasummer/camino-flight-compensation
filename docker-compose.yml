@@ -19,3 +19,9 @@ services:
 
     command: >
       --config /cmb-config/messenger-config.yaml
+
+  partner-plugin:
+    build:
+      context: .
+      dockerfile: Dockerfile.partner-plugin
+    image: camino-refundio-partner-plugin

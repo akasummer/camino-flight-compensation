@@ -1,0 +1,25 @@
+# build stage
+FROM golang:1.23.5-alpine3.20 AS build-stage
+RUN apk update && apk upgrade && apk add build-base
+
+WORKDIR /camino-messenger-bot
+
+COPY . .
+
+RUN go mod download
+RUN go build -o plugin supplier/partner-plugin/main.go
+
+
+# runtime stage
+FROM alpine:3.20 AS runtime-stage
+
+WORKDIR /
+
+COPY --from=build-stage /camino-messenger-bot/plugin /plugin
+
+# Run the 'env' command
+ENV CMB_PARTNER_PLUGIN_MOCK_EVENTS=true
+
+EXPOSE 50051
+
+ENTRYPOINT [ "./plugin" ]
