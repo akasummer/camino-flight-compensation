@@ -70,17 +70,17 @@
             <mxPoint x="701" y="168.57" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="1lPbTOZ_Uf3YX76tQ-uF-34" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="1lPbTOZ_Uf3YX76tQ-uF-12">
+        <mxCell id="1lPbTOZ_Uf3YX76tQ-uF-38" value="" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" vertex="1" parent="1">
+          <mxGeometry x="870" y="129.07000000000002" width="60" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="1lPbTOZ_Uf3YX76tQ-uF-39" value="&lt;div&gt;Refundio system&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="845" y="210.33" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="1lPbTOZ_Uf3YX76tQ-uF-40" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" target="1lPbTOZ_Uf3YX76tQ-uF-38">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="400" y="320" as="sourcePoint" />
-            <mxPoint x="140" y="290" as="targetPoint" />
+            <mxPoint x="769" y="169" as="sourcePoint" />
+            <mxPoint x="850" y="168.57" as="targetPoint" />
           </mxGeometry>
-        </mxCell>
-        <mxCell id="1lPbTOZ_Uf3YX76tQ-uF-36" value="" style="image;html=1;image=img/lib/clip_art/computers/Software_128x128.png" vertex="1" parent="1">
-          <mxGeometry x="100" y="290" width="80" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="1lPbTOZ_Uf3YX76tQ-uF-37" value="Async operarions for refunding" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="80" y="380" width="115" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
