@@ -36,3 +36,13 @@ services:
 
     ports:
       - "3000:3000"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+
+    image: camino-campensation-frontend
+
+    ports:
+      - "8080:80"
