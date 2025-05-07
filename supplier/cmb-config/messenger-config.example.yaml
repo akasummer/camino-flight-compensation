@@ -67,7 +67,7 @@ partner_plugin:
 ### RPC server
 rpc_server:
   # Listen on this port for incoming RPC requests
-  port: 9090
+  port: 9091
 
   # TLS configuration
   unencrypted: true
