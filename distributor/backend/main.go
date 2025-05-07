@@ -1,11 +1,8 @@
 package main
 
 import (
-	"context"
-
-	"buf.build/gen/go/chain4travel/camino-messenger-protocol/grpc/go/cmp/services/ping/v1/pingv1grpc"
-	pingv1 "buf.build/gen/go/chain4travel/camino-messenger-protocol/protocolbuffers/go/cmp/services/ping/v1"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
@@ -26,20 +23,16 @@ func main() {
 
 	defer grpcConn.Close()
 
-	pingClient := pingv1grpc.NewPingServiceClient(grpcConn)
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: "*",
+	}))
 
-	ctx := context.Background()
-	ctx = metadata.AppendToOutgoingContext(ctx, "recipient", "0x8ef21b1A5Df8a513030eEa9707b74bbdee1a7f43")
-
-	app.Get("/ping", func(c *fiber.Ctx) error {
-		response, err := pingClient.Ping(ctx, &pingv1.PingRequest{PingMessage: "Hello, World!"})
-
-		if err != nil {
-			return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
-		}
-
-		return c.SendString(response.GetPingMessage())
+	app.Use(func(c *fiber.Ctx) error {
+		c.SetUserContext(metadata.AppendToOutgoingContext(c.UserContext(), "recipient", "0x8ef21b1A5Df8a513030eEa9707b74bbdee1a7f43"))
+		return c.Next()
 	})
+
+	app.Post("/submit", NewSubmitHandler(grpcConn).Submit)
 
 	app.Listen(":3000")
 }
