@@ -1,0 +1,36 @@
+@startuml
+
+actor "End-Consumer" as endUser
+participant "Distributor-System" as distributorSystem
+' participant "Distributor Partner-Plugin" as distributorPlugin
+' participant "Distributor-Bot" as distributorBot
+' participant "Supplier-Bot" as supplierBot
+' participant "Supplier Partner-Plugin" as supplierPlugin
+participant "Supplier-System" as supplierSystem
+actor "Refundio" as refundio
+
+endUser -> distributorSystem : Supplies form data
+distributorSystem -> supplierSystem : ClaimFlightDisruptionRequest
+supplierSystem -> refundio : Receives form data
+supplierSystem -> distributorSystem : ClaimFlightDisruptionResponse
+distributorSystem -> endUser : Receive confirmation
+refundio -> refundio : Eligibility check
+
+alt Additiomal information is required (i.E.: sign contract, upload documents, submit payment info)
+    supplierSystem -> distributorSystem : ClaimFlightDisruptionStatusUpdateRequest 
+    note right : CLAIM_STATUS_MORE_INFO_REQUIRED
+    distributorSystem -> endUser : Request additional information
+    distributorSystem -> supplierSystem : ClaimFlightDisruptionStatusUpdateResponse
+
+    endUser -> distributorSystem : Supplies additional information
+    distributorSystem -> supplierSystem : ClaimFlightDisruptionExtraInfoRequest
+    supplierSystem -> refundio : Receives additional information
+    supplierSystem -> distributorSystem : ClaimFlightDisruptionExtraInfoResponse
+
+else Off-Chain Payout 
+    supplierSystem -> distributorSystem : ClaimFlightDisruptionStatusUpdateRequest 
+    note right : CLAIM_STATUS_PAYOUT
+    distributorSystem -> endUser : Send message to user with link to payout
+    distributorSystem -> supplierSystem : ClaimFlightDisruptionStatusUpdateResponse
+
+end
