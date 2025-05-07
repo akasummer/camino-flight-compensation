@@ -12,7 +12,6 @@ import (
 	pingv1 "buf.build/gen/go/chain4travel/camino-messenger-protocol/protocolbuffers/go/cmp/services/ping/v1"
 	typesv1 "buf.build/gen/go/chain4travel/camino-messenger-protocol/protocolbuffers/go/cmp/types/v1"
 	"github.com/akasummer/camino-flight-compensation/supplier/partner-plugin/events"
-	"github.com/chain4travel/camino-messenger-bot/internal/metadata"
 )
 
 var _ pingv1grpc.PingServiceServer = (*pingServiceV1Server)(nil)
@@ -30,18 +29,12 @@ func (s *pingServiceV1Server) Ping(ctx context.Context, req *pingv1.PingRequest)
 		log.Printf("error sending event: %v", err)
 	}
 
-	md := metadata.Metadata{}
-	err := md.ExtractMetadata(ctx)
-	if err != nil {
-		log.Print("error extracting metadata")
-	}
-	md.Stamp(fmt.Sprintf("%s-%s", "ext-system", "response"))
-	log.Printf("Responding to request: %s (Ping)", md.RequestID)
+	log.Printf("Responding to request (Ping)")
 
 	return &pingv1.PingResponse{
 		Header: &typesv1.ResponseHeader{
 			Status: typesv1.StatusType_STATUS_TYPE_SUCCESS,
 		},
-		PingMessage: fmt.Sprintf("Ping response to [%s] with request ID: %s", req.PingMessage, md.RequestID),
+		PingMessage: fmt.Sprintf("Ping response to [%s]", req.PingMessage),
 	}, nil
 }
