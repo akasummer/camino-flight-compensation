@@ -1,0 +1,24 @@
+# build stage
+FROM golang:1.23.5-alpine3.20 AS build-stage
+RUN apk update && apk upgrade && apk add build-base
+
+WORKDIR /campensation-backend
+
+COPY . .
+
+RUN go mod download
+RUN go build -o server /campensation-backend/backend/main.go
+
+# runtime stage
+FROM alpine:3.20 AS runtime-stage
+
+WORKDIR /
+
+COPY --from=build-stage /campensation-backend/server /server
+
+# Run the 'env' command
+ENV CMB_PARTNER_PLUGIN_MOCK_EVENTS=true
+
+EXPOSE 3000
+
+ENTRYPOINT [ "./server" ]

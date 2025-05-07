@@ -18,7 +18,7 @@ func main() {
 		return c.SendString("Hello, World!")
 	})
 
-	grpcConn, err := grpc.NewClient("localhost:9090", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	grpcConn, err := grpc.NewClient("distributor-bot:9090", grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 	if err != nil {
 		panic(err)
