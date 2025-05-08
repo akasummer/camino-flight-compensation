@@ -1,22 +1,33 @@
-
-import React, { createContext, useContext, useState, ReactNode, useCallback } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useCallback,
+} from "react";
 import { v4 as uuidv4 } from "uuid";
-import { 
-  FormData, 
-  Flight, 
-  Passenger, 
-  Airport, 
-  UploadedFile, 
-  DisruptionReason, 
-  Compensation, 
+import {
+  FormData,
+  Flight,
+  Passenger,
+  Airport,
+  UploadedFile,
+  DisruptionReason,
+  Compensation,
   FormStep,
   Claim,
   Message,
   Response,
-  ItineraryAirport
+  ItineraryAirport,
 } from "@/types";
-import { submitClaim, getClaimMessages, mockStatusUpdate, mockRequestAdditionalInfo } from "@/api/mockApi";
+import {
+  submitClaim,
+  getClaimMessages,
+  mockStatusUpdate,
+  mockRequestAdditionalInfo,
+} from "@/api/mockApi";
 import { toast } from "@/components/ui/sonner";
+import { ethers } from "ethers";
 
 interface FormContextType {
   formData: FormData;
@@ -53,7 +64,10 @@ interface FormContextType {
 
 const FormContext = createContext<FormContextType | undefined>(undefined);
 
-const createEmptyFlight = (departureAirport: Airport | null = null, arrivalAirport: Airport | null = null): Flight => ({
+const createEmptyFlight = (
+  departureAirport: Airport | null = null,
+  arrivalAirport: Airport | null = null
+): Flight => ({
   id: uuidv4(),
   departureAirport,
   arrivalAirport,
@@ -69,7 +83,9 @@ const createEmptyPassenger = (): Passenger => ({
   email: "",
 });
 
-export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const FormProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [formData, setFormData] = useState<FormData>({
     itinerary: [],
     flights: [],
@@ -129,18 +145,21 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }));
   }, []);
 
-  const updateAirportInItinerary = useCallback((index: number, airport: Airport | null) => {
-    setFormData((prev) => {
-      const updatedItinerary = [...prev.itinerary];
-      if (index >= 0 && index < updatedItinerary.length) {
-        updatedItinerary[index] = { ...updatedItinerary[index], airport };
-      }
-      return {
-        ...prev,
-        itinerary: updatedItinerary,
-      };
-    });
-  }, []);
+  const updateAirportInItinerary = useCallback(
+    (index: number, airport: Airport | null) => {
+      setFormData((prev) => {
+        const updatedItinerary = [...prev.itinerary];
+        if (index >= 0 && index < updatedItinerary.length) {
+          updatedItinerary[index] = { ...updatedItinerary[index], airport };
+        }
+        return {
+          ...prev,
+          itinerary: updatedItinerary,
+        };
+      });
+    },
+    []
+  );
 
   const removeAirportFromItinerary = useCallback((index: number) => {
     setFormData((prev) => {
@@ -156,17 +175,17 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const generateFlightsFromItinerary = useCallback(() => {
     setFormData((prev) => {
       const newFlights: Flight[] = [];
-      
+
       // Create flights from itinerary
       for (let i = 0; i < prev.itinerary.length - 1; i++) {
         const departureAirport = prev.itinerary[i].airport;
         const arrivalAirport = prev.itinerary[i + 1].airport;
         newFlights.push(createEmptyFlight(departureAirport, arrivalAirport));
       }
-      
+
       // Set hasConnectingFlights based on number of airports
       const hasMultipleFlights = prev.itinerary.length > 2;
-      
+
       return {
         ...prev,
         flights: newFlights,
@@ -175,14 +194,17 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     });
   }, []);
 
-  const updateFlightField = useCallback((flightId: string, field: string, value: any) => {
-    setFormData((prev) => ({
-      ...prev,
-      flights: prev.flights.map((flight) =>
-        flight.id === flightId ? { ...flight, [field]: value } : flight
-      ),
-    }));
-  }, []);
+  const updateFlightField = useCallback(
+    (flightId: string, field: string, value: any) => {
+      setFormData((prev) => ({
+        ...prev,
+        flights: prev.flights.map((flight) =>
+          flight.id === flightId ? { ...flight, [field]: value } : flight
+        ),
+      }));
+    },
+    []
+  );
 
   const addFlight = useCallback(() => {
     setFormData((prev) => ({
@@ -215,7 +237,9 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const removeFellowPassenger = useCallback((id: string) => {
     setFormData((prev) => ({
       ...prev,
-      fellowPassengers: prev.fellowPassengers.filter((passenger) => passenger.id !== id),
+      fellowPassengers: prev.fellowPassengers.filter(
+        (passenger) => passenger.id !== id
+      ),
     }));
   }, []);
 
@@ -276,15 +300,19 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const submitForm = useCallback(async () => {
     try {
       setIsSubmitting(true);
-      
+
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const userAddress = await signer.getAddress();
+
       // Submit the form data
-      const submittedClaim = await submitClaim(formData);
+      const submittedClaim = await submitClaim(formData, userAddress);
       setClaim(submittedClaim);
-      
+
       // Get initial messages
       setIsLoading(true);
       const messages = await getClaimMessages(submittedClaim.id);
-      
+
       // Update claim with messages
       setClaim((prevClaim) => {
         if (!prevClaim) return submittedClaim;
@@ -293,7 +321,7 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           messages,
         };
       });
-      
+
       toast.success("Claim submitted successfully!");
       goToNextStep();
     } catch (error) {
@@ -327,11 +355,11 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const simulateStatusUpdate = useCallback(async () => {
     if (!claim) return;
-    
+
     setIsLoading(true);
     try {
       const newStatus = await mockStatusUpdate(claim.id);
-      
+
       setClaim((prevClaim) => {
         if (!prevClaim) return null;
         return {
@@ -339,8 +367,10 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           status: newStatus,
         };
       });
-      
-      toast.info(`Claim status updated to ${newStatus.replace("_", " ").toLowerCase()}`);
+
+      toast.info(
+        `Claim status updated to ${newStatus.replace("_", " ").toLowerCase()}`
+      );
     } catch (error) {
       console.error("Error updating status:", error);
     } finally {
@@ -350,11 +380,11 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const simulateNewMessage = useCallback(async () => {
     if (!claim) return;
-    
+
     setIsLoading(true);
     try {
       const newMessage = await mockRequestAdditionalInfo(claim.id);
-      
+
       setClaim((prevClaim) => {
         if (!prevClaim) return null;
         return {
@@ -363,7 +393,7 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           status: "MORE_INFO_NEEDED",
         };
       });
-      
+
       toast.info("New message received", {
         description: "The airline requires additional information.",
       });
@@ -385,7 +415,7 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     goToPreviousStep,
     updateFlightField,
     addAirportToItinerary,
-    updateAirportInItinerary, 
+    updateAirportInItinerary,
     removeAirportFromItinerary,
     generateFlightsFromItinerary,
     addFlight,
