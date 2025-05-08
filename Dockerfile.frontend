@@ -3,9 +3,13 @@ FROM node:lts-alpine AS build-stage
 
 WORKDIR /frontend
 
-COPY ./distributor/frontend .
+COPY ./distributor/frontend/package.json .
+COPY ./distributor/frontend/package-lock.json .
 
 RUN npm install
+
+COPY ./distributor/frontend/ .
+
 RUN npm run build
 
 # runtime stage

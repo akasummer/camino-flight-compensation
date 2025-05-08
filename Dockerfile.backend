@@ -4,9 +4,13 @@ RUN apk update && apk upgrade && apk add build-base
 
 WORKDIR /campensation-backend
 
-COPY . .
+COPY ./go.mod .
+COPY ./go.sum .
 
 RUN go mod download
+
+COPY ./distributor/backend ./distributor/backend
+
 RUN go build -o server /campensation-backend/distributor/backend/
 
 # runtime stage
