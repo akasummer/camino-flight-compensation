@@ -150,7 +150,7 @@ contract RequestProcessing is Ownable {
 
         require(request.id == requestId, "Request does not exist");
         require(request.status == RequestStatus.Approved, "Request is not approved");
-        require(!request.status == RequestStatus.Paid, "Request already paid");
+        require(request.status != RequestStatus.Paid, "Request already paid");
         
         IERC20 erc20Token = IERC20(token);
         
@@ -171,7 +171,7 @@ contract RequestProcessing is Ownable {
         uint256 id,
         address requester,
         Flight[] memory flights,
-        RequestStatus status,
+        RequestStatus status
     ) {
         Request storage request = _requests[requestId];
 
@@ -188,7 +188,7 @@ contract RequestProcessing is Ownable {
             request.id,
             request.requester,
             flightCopies,
-            request.status,
+            request.status
         );
     }
     
