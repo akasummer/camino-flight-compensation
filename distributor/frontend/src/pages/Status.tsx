@@ -1,19 +1,23 @@
-import StatusScreen from "@/components/StatusScreen";
+import UserSubmittedClaims from "@/components/UserSubmittedClaims";
 import { connectWallet } from "@/util/connectWallet";
 import { getRequestsForUser } from "@/util/getRequestsForUser";
 import React, { useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { RefreshCcw } from "lucide-react";
 
 const Status = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
   const [account, setAccount] = React.useState(null);
+  const [requests, setRequests] = React.useState([]);
 
   const connect = async () => {
     setIsLoading(true);
     try {
       const acc = await connectWallet();
       setAccount(acc);
-      const requests = await getRequestsForUser(); 
+      const requests = await getRequestsForUser();
+      setRequests(requests);
       console.log(`Requests for user ${acc}:`, requests);
     } catch (error) {
       setError(error);
@@ -65,7 +69,22 @@ const Status = () => {
         </div>
       </header>
       <main className="container mx-auto px-4 py-8 max-w-3xl">
-        <StatusScreen />
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
+          <h2 className="text-xl font-semibold">Your claims</h2>
+          <div className="flex gap-2 mt-2 md:mt-0">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={connect}
+              disabled={isLoading}
+              className="flex items-center"
+            >
+              <RefreshCcw className="h-4 w-4 mr-2" />
+              Refresh list
+            </Button>
+          </div>
+        </div>
+        <UserSubmittedClaims requests={requests} />
       </main>
     </div>
   );
