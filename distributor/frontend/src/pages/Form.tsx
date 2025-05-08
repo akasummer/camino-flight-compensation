@@ -4,7 +4,7 @@ import { FormProvider } from "@/context/FormContext";
 import StepIndicator from "@/components/StepIndicator";
 import FormStepper from "@/components/FormStepper";
 
-const Layout: React.FC = () => {
+const Form: React.FC = () => {
   return (
     <FormProvider>
       <div className="min-h-screen bg-slate-50">
@@ -29,4 +29,4 @@ const Layout: React.FC = () => {
   );
 };
 
-export default Layout;
+export default Form;

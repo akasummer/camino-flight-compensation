@@ -104,3 +104,9 @@ export type FormData = {
 };
 
 export type FormStep = "ITINERARY" | "FLIGHT_INFO" | "PERSONAL_INFO" | "CLAIM_DETAILS" | "STATUS";
+
+declare global {
+  interface Window {
+    ethereum?: any; // You can replace `any` with `EthereumProvider` from @metamask/providers
+  }
+}
