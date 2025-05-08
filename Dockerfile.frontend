@@ -5,6 +5,7 @@ WORKDIR /frontend
 
 COPY ./distributor/frontend/package.json .
 COPY ./distributor/frontend/package-lock.json .
+COPY ./.env .
 
 RUN npm install
 

@@ -5,7 +5,7 @@ require('@nomiclabs/hardhat-waffle');
 require('@openzeppelin/hardhat-upgrades');
 require('@typechain/hardhat');
 
-dotenv.config();
+dotenv.config({ path: '../../.env' });
 
 const config = {
   solidity: '0.8.17',

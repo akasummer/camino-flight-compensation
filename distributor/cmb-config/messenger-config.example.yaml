@@ -23,10 +23,10 @@ chain_rpc_url: wss://columbus.camino.network/ext/bc/C/ws
 # Private key of the bot in hex format without the 0x prefix.
 # Used for signing transactions on the c-chain, also used to log in into Matrix. This
 # address needs to have some funds to pay for transaction fees on the C-Chain.
-bot_key: TODO
+bot_key: DISTRIBUTER_BOT_KEY
 
 # Address of the CM Account that the bot belongs to
-cm_account_address: TODO
+cm_account_address: DISTRIBUTER_CM_ACCOUNT_ADDRESS
 
 
 

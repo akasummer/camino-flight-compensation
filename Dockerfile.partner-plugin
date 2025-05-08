@@ -20,7 +20,6 @@ FROM alpine:3.20 AS runtime-stage
 WORKDIR /
 
 COPY --from=build-stage /camino-messenger-bot/plugin /plugin
-COPY --from=build-stage /camino-messenger-bot/supplier/partner-plugin/.env /.env
 
 # Run the 'env' command
 ENV CMB_PARTNER_PLUGIN_MOCK_EVENTS=true
