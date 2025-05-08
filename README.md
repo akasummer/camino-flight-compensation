@@ -18,13 +18,13 @@ Before setting up the system, ensure the following prerequisites are met:
 
 Create a `.env` file in your root directory and define the following variables:
 
-| Variable | Description |
-|----------|-------------|
-| `VITE_BACKEND_BASE_PATH` | Backend API endpoint used by the frontend |
-| `VITE_CONTRACT_ADDRESS` | Address of the deployed smart contract |
-| `COLUMBUS_URL` | URL of the Columbus Camino network |
-| `PRIVATE_KEY` | Private key used to deploy and manage the smart contract |
-| `CONTRACT_ADDRESS` | Smart contract address used by the partner plugin (set it after deployment of the contract) |
+| Variable                 | Description                                                                                 |
+| ------------------------ | ------------------------------------------------------------------------------------------- |
+| `VITE_BACKEND_BASE_PATH` | Backend API endpoint used by the frontend                                                   |
+| `VITE_CONTRACT_ADDRESS`  | Address of the deployed smart contract                                                      |
+| `COLUMBUS_URL`           | URL of the Columbus Camino network                                                          |
+| `PRIVATE_KEY`            | Private key used to deploy and manage the smart contract                                    |
+| `CONTRACT_ADDRESS`       | Smart contract address used by the partner plugin (set it after deployment of the contract) |
 
 ---
 
@@ -33,8 +33,9 @@ Create a `.env` file in your root directory and define the following variables:
 Duplicate and configure the messenger bot settings:
 
 1. Copy the example configuration files:
+
    ```
-   distributor/cmb-config/messenger-config.example.yaml → distributor/cmb-config/messenger-config.yaml  
+   distributor/cmb-config/messenger-config.example.yaml → distributor/cmb-config/messenger-config.yaml
    supplier/cmb-config/messenger-config.example.yaml → supplier/cmb-config/messenger-config.yaml
    ```
 
@@ -51,7 +52,7 @@ Duplicate and configure the messenger bot settings:
 To build and deploy the smart contract:
 
 ```bash
-cd supplier/smart/contract
+cd supplier/smart-contract
 npm install
 npm run compile
 npm run deploy
