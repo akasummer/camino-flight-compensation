@@ -11,6 +11,7 @@ type Request struct {
 	TicketFile           File        `json:"ticketFile"`
 	EvidenceFiles        []File      `json:"evidenceFiles"`
 	Status               string      `json:"status"`
+	WalletAddress        string      `json:"walletAddress"`
 }
 
 type Flight struct {

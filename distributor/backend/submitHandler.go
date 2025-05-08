@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"buf.build/gen/go/chain4travel/camino-messenger-protocol/grpc/go/cmp/services/ping/v1/pingv1grpc"
@@ -33,7 +34,15 @@ func (h *SubmitHandler) Submit(c *fiber.Ctx) error {
 
 	fmt.Println("Received request:", req)
 
-	_, err := h.pingClient.Ping(c.UserContext(), &pingv1.PingRequest{PingMessage: "Hello, World!"})
+	jsonData, err := json.Marshal(req)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"success": false,
+			"error":   err.Error(),
+		})
+	}
+
+	_, err = h.pingClient.Ping(c.UserContext(), &pingv1.PingRequest{PingMessage: string(jsonData)})
 
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
