@@ -52,17 +52,18 @@ contract RequestProcessing is Ownable {
     
     /**
      * @dev Submit a new request
+     * @param requesterAddress The address of the requester
      * @param flights Array of Flight structures
      * @return id The ID of the newly created request
      */
-    function submitRequest(Flight[] calldata flights) external returns (uint256) {
+    function submitRequest(address requesterAddress, Flight[] calldata flights) external returns (uint256) {
         _requestIdCounter.increment();
         uint256 newRequestId = _requestIdCounter.current();
         
         Request storage newRequest = _requests[newRequestId];
 
         newRequest.id = newRequestId;
-        newRequest.requester = msg.sender;
+        newRequest.requester = requesterAddress;
         newRequest.status = RequestStatus.Pending;
             
         // Copy each flight from calldata to storage manually
@@ -70,9 +71,9 @@ contract RequestProcessing is Ownable {
             newRequest.flights.push(flights[i]);
         }
 
-        _userRequests[msg.sender].push(newRequestId);
+        _userRequests[requesterAddress].push(newRequestId);
 
-        emit RequestSubmitted(newRequestId, msg.sender);
+        emit RequestSubmitted(newRequestId, requesterAddress);
 
         return newRequestId;
     }
@@ -85,7 +86,6 @@ contract RequestProcessing is Ownable {
         Request storage request = _requests[requestId];
 
         require(request.id == requestId, "Request does not exist");
-        require(request.requester == msg.sender, "Only requester can provide additional info");
         require(request.status == RequestStatus.NeedMoreInfo, "Additional info not requested");
         
         request.status = RequestStatus.Pending;
@@ -166,7 +166,6 @@ contract RequestProcessing is Ownable {
         emit RequestStatusChanged(requestId, RequestStatus.Paid);
     }
     
-
     function getRequest(uint256 requestId) external view returns (
         uint256 id,
         address requester,
