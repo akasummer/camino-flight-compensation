@@ -149,27 +149,20 @@ contract RequestProcessing is Ownable {
     /**
      * @dev Pay an approved request (admin only)
      * @param requestId The ID of the request
-     * @param token The ERC20 token address to pay with
-     * @param amount The amount to pay
      */
-    function payRequest(uint256 requestId, address token, uint256 amount) external onlyOwner {
+    function payRequest(uint256 requestId) external payable onlyOwner {
         Request storage request = _requests[requestId];
 
         require(request.id == requestId, "Request does not exist");
         require(request.status == RequestStatus.Approved, "Request is not approved");
         require(request.status != RequestStatus.Paid, "Request already paid");
-        
-        IERC20 erc20Token = IERC20(token);
-        
-        // Check if contract has enough allowance
-        require(erc20Token.allowance(msg.sender, address(this)) > amount, "Insufficient allowance");
-        
-        // Transfer tokens from admin to requester
-        require(erc20Token.transferFrom(msg.sender, request.requester, amount), "Token transfer failed");
-        
+        require(msg.value > 0, "Must send native token");
+
+        payable(request.requester).transfer(msg.value);
+
         request.status = RequestStatus.Paid;
-        
-        emit RequestPaid(requestId, request.requester, amount);
+
+        emit RequestPaid(requestId, request.requester, msg.value);
         emit RequestStatusChanged(requestId, RequestStatus.Paid);
     }
     
