@@ -38,6 +38,9 @@ contract RequestProcessing is Ownable {
     
     // Mapping from address to their request IDs
     mapping(address => uint256[]) private _userRequests;
+
+    // Array to store all request IDs
+    uint256[] private _requestIds;
     
     // Events
     event RequestSubmitted(uint256 indexed requestId, address indexed requester);
@@ -73,6 +76,10 @@ contract RequestProcessing is Ownable {
 
         _userRequests[requesterAddress].push(newRequestId);
 
+        // Store the request ID in the array
+        _requestIds.push(newRequestId);
+
+        // Emit event for request submission
         emit RequestSubmitted(newRequestId, requesterAddress);
 
         return newRequestId;
@@ -206,5 +213,9 @@ contract RequestProcessing is Ownable {
      */
     function getTotalRequests() external view returns (uint256) {
         return _requestIdCounter.current();
+    }
+
+    function getAllRequests() external view onlyOwner returns (uint256[] memory) {
+        return _requestIds;
     }
 }

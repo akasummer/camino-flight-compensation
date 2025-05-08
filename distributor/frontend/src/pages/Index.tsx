@@ -25,6 +25,7 @@ const Index = () => {
         </svg>
         Go to Form
       </Link>
+      
       <Link
         to="/status"
         className="w-60 h-60 flex flex-col items-center justify-center bg-gray-200 rounded-lg shadow-md cursor-pointer"
