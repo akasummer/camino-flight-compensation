@@ -1,55 +1,7 @@
 import { ethers } from "ethers";
+import { CONTRACT_ABI } from "./abi";
 
 const CONTRACT_ADDRESS = import.meta.env.VITE_CONTRACT_ADDRESS;
-const CONTRACT_ABI = [
-  "function getUserRequests(address user) view returns (uint256[])",
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "requestId",
-        type: "uint256",
-      },
-    ],
-    name: "getRequest",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "id",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "requester",
-        type: "address",
-      },
-      {
-        components: [
-          {
-            internalType: "string",
-            name: "flightNumber",
-            type: "string",
-          },
-          {
-            internalType: "uint256",
-            name: "departureDate",
-            type: "uint256",
-          },
-        ],
-        internalType: "struct RequestProcessing.Flight[]",
-        name: "flights",
-        type: "tuple[]",
-      },
-      {
-        internalType: "enum RequestProcessing.RequestStatus",
-        name: "status",
-        type: "uint8",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-];
 
 export enum RequestStatus {
   Pending = 0,
