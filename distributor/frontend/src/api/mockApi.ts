@@ -22,7 +22,10 @@ export const uploadFile = async (file: File): Promise<UploadedFile> => {
 };
 
 // Submit the claim form
-export const submitClaim = async (formData: FormData): Promise<Claim> => {
+export const submitClaim = async (
+  formData: FormData,
+  walletAddress: string
+): Promise<Claim> => {
   const apiBasePath = import.meta.env.VITE_BACKEND_BASE_PATH;
 
   const response = await fetch(`${apiBasePath}/submit`, {
@@ -30,7 +33,7 @@ export const submitClaim = async (formData: FormData): Promise<Claim> => {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(formData),
+    body: JSON.stringify({ ...formData, walletAddress: walletAddress }),
   });
   if (!response.ok) {
     throw new Error("Network response was not ok");
