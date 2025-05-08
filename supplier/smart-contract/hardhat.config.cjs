@@ -1,9 +1,9 @@
-import * as dotenv from 'dotenv';
+const dotenv = require('dotenv');
 
-import '@nomiclabs/hardhat-etherscan';
-import '@nomiclabs/hardhat-waffle';
-import '@openzeppelin/hardhat-upgrades';
-import '@typechain/hardhat';
+require('@nomiclabs/hardhat-etherscan');
+require('@nomiclabs/hardhat-waffle');
+require('@openzeppelin/hardhat-upgrades');
+require('@typechain/hardhat');
 
 dotenv.config();
 
@@ -18,4 +18,4 @@ const config = {
   },
 };
 
-export default config;
+exports.default = config;
