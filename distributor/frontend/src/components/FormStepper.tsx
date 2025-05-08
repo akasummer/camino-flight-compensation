@@ -4,6 +4,7 @@ import ItineraryForm from "@/components/ItineraryForm";
 import FlightInfoForm from "@/components/FlightInfoForm";
 import PersonalInfoForm from "@/components/PersonalInfoForm";
 import ClaimDetailsForm from "@/components/ClaimDetailsForm";
+import StatusScreen from "@/components/StatusScreen";
 
 const FormStepper: React.FC = () => {
   const { currentStep } = useForm();
@@ -14,6 +15,7 @@ const FormStepper: React.FC = () => {
       {currentStep === "FLIGHT_INFO" && <FlightInfoForm />}
       {currentStep === "PERSONAL_INFO" && <PersonalInfoForm />}
       {currentStep === "CLAIM_DETAILS" && <ClaimDetailsForm />}
+      {currentStep === "STATUS" && <StatusScreen />}
     </div>
   );
 };

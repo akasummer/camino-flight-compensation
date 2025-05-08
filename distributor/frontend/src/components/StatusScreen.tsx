@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useForm } from "@/context/FormContext";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Card,
@@ -22,14 +21,10 @@ import {
   RefreshCcw,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Claim } from "@/types";
 
 const StatusScreen: React.FC = () => {
-  const [claim, setClaim] = useState<Claim | null>(() => {
-    const storedClaim = localStorage.getItem("refundio-claim");
-    return storedClaim ? (JSON.parse(storedClaim) as Claim) : null;
-  });
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { claim, isLoading, addResponse, simulateStatusUpdate } = useForm();
+
   const [responseContent, setResponseContent] = useState<string>("");
   const [responseFile, setResponseFile] = useState<File | null>(null);
   const [respondingToMessageId, setRespondingToMessageId] = useState<
@@ -65,7 +60,7 @@ const StatusScreen: React.FC = () => {
         responseFile || undefined
       );
 
-      // addResponse(response);
+      addResponse(response);
       setResponseContent("");
       setResponseFile(null);
       setRespondingToMessageId(null);
@@ -96,7 +91,7 @@ const StatusScreen: React.FC = () => {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => {}}
+            onClick={simulateStatusUpdate}
             disabled={isLoading}
             className="flex items-center"
           >

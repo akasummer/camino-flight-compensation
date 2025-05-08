@@ -11,6 +11,7 @@ const StepIndicator: React.FC = () => {
     { id: "FLIGHT_INFO", label: "Flight" },
     { id: "PERSONAL_INFO", label: "Personal" },
     { id: "CLAIM_DETAILS", label: "Claim" },
+    { id: "STATUS", label: "Status" },
   ];
 
   const getStepStatus = (stepId: string) => {
