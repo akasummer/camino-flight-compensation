@@ -1,10 +1,8 @@
-
+import StatusScreen from "@/components/StatusScreen";
 import { connectWallet } from "@/util/connectWallet";
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
 
 const Status = () => {
-  
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
   const [account, setAccount] = React.useState(null);
@@ -26,11 +24,19 @@ const Status = () => {
   }, []);
 
   if (isLoading) {
-    return <div className="flex justify-center items-center h-screen">Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        Loading...
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="flex justify-center items-center h-screen">Error: {error.message}</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        Error: {error.message}
+      </div>
+    );
   }
 
   if (!account) {
@@ -47,8 +53,17 @@ const Status = () => {
   }
 
   return (
-    <div>
-      Connected to account: {account}
+    <div className="min-h-screen bg-slate-50">
+      <header className="bg-white shadow-sm">
+        <div className="container mx-auto py-4">
+          <h1 className="text-2xl font-bold text-navy-800 text-center">
+            Flight Claim Form
+          </h1>
+        </div>
+      </header>
+      <main className="container mx-auto px-4 py-8 max-w-3xl">
+        <StatusScreen />
+      </main>
     </div>
   );
 };

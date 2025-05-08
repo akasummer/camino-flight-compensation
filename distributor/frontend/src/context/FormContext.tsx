@@ -4,6 +4,7 @@ import React, {
   useState,
   ReactNode,
   useCallback,
+  useEffect,
 } from "react";
 import { v4 as uuidv4 } from "uuid";
 import {
@@ -26,6 +27,7 @@ import {
   mockStatusUpdate,
   mockRequestAdditionalInfo,
 } from "@/api/mockApi";
+import { useNavigate } from "react-router-dom";
 import { toast } from "@/components/ui/sonner";
 import { ethers } from "ethers";
 
@@ -99,10 +101,18 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({
     evidenceFiles: [],
   });
 
+  const navigate = useNavigate();
+
   const [currentStep, setCurrentStep] = useState<FormStep>("ITINERARY");
   const [claim, setClaim] = useState<Claim | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (claim !== null) {
+      localStorage.setItem("refundio-claim", JSON.stringify(claim));
+    }
+  }, [claim]);
 
   const goToNextStep = useCallback(() => {
     setCurrentStep((prevStep) => {
@@ -113,8 +123,6 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({
           return "PERSONAL_INFO";
         case "PERSONAL_INFO":
           return "CLAIM_DETAILS";
-        case "CLAIM_DETAILS":
-          return "STATUS";
         default:
           return prevStep;
       }
@@ -130,13 +138,15 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({
           return "FLIGHT_INFO";
         case "CLAIM_DETAILS":
           return "PERSONAL_INFO";
-        case "STATUS":
-          return "CLAIM_DETAILS";
         default:
           return prevStep;
       }
     });
   }, []);
+
+  const goToStatusPage = useCallback(() => {
+    navigate("/status");
+  }, [navigate]);
 
   const addAirportToItinerary = useCallback((airport: Airport | null) => {
     setFormData((prev) => ({
@@ -323,7 +333,7 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({
       });
 
       toast.success("Claim submitted successfully!");
-      goToNextStep();
+      goToStatusPage();
     } catch (error) {
       console.error("Error submitting form:", error);
       toast.error("Failed to submit claim. Please try again.");
@@ -331,7 +341,7 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({
       setIsSubmitting(false);
       setIsLoading(false);
     }
-  }, [formData, goToNextStep]);
+  }, [formData, goToStatusPage]);
 
   const addMessage = useCallback((message: Message) => {
     setClaim((prevClaim) => {
