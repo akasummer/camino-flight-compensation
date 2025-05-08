@@ -1,5 +1,6 @@
 import StatusScreen from "@/components/StatusScreen";
 import { connectWallet } from "@/util/connectWallet";
+import { getRequestsForUser } from "@/util/getRequestsForUser";
 import React, { useEffect } from "react";
 
 const Status = () => {
@@ -12,6 +13,8 @@ const Status = () => {
     try {
       const acc = await connectWallet();
       setAccount(acc);
+      const requests = await getRequestsForUser(); 
+      console.log(`Requests for user ${acc}:`, requests);
     } catch (error) {
       setError(error);
     } finally {
